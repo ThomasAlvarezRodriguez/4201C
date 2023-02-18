@@ -9,9 +9,9 @@ class AmazonSearchSpider(scrapy.Spider):
         }
 
     def start_requests(self):
-        keyword_list = ['ipad']
+        keyword_list = ['SSD']
         for keyword in keyword_list:
-            amazon_search_url = f'https://www.amazon.com/s?k={keyword}&page=1'
+            amazon_search_url = f'https://www.amazon.fr/s?k={keyword}&page=1'
             yield scrapy.Request(url=amazon_search_url, callback=self.parse_search_results, meta={'keyword': keyword, 'page': 1})
 
     def parse_search_results(self, response):
@@ -23,7 +23,7 @@ class AmazonSearchSpider(scrapy.Spider):
         for product in search_products:
             relative_url = product.css("h2>a::attr(href)").get()
             asin = relative_url.split('/')[3] if len(relative_url.split('/')) >= 4 else None
-            product_url = urljoin('https://www.amazon.com/', relative_url).split("?")[0]
+            product_url = urljoin('https://www.amazon.fr/', relative_url).split("?")[0]
             yield  {
                     "keyword": keyword,
                     "asin": asin,
@@ -45,7 +45,7 @@ class AmazonSearchSpider(scrapy.Spider):
             ).getall()
 
             for page_num in available_pages:
-                amazon_search_url = f'https://www.amazon.com/s?k={keyword}&page={page_num}'
+                amazon_search_url = f'https://www.amazon.fr/s?k={keyword}&page={page_num}'
                 yield scrapy.Request(url=amazon_search_url, callback=self.parse_search_results, meta={'keyword': keyword, 'page': page_num})
 
 

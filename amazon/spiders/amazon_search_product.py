@@ -2,6 +2,10 @@ import json
 import scrapy
 from urllib.parse import urljoin
 import re
+import pandas as pd
+
+df = pd.read_csv('C:/Users/eityg/Git/4201C/ASIN.csv') # Read the data
+asin_list = df['asin'].tolist()
 
 class AmazonSearchProductSpider(scrapy.Spider):
     name = "amazon_search_product"
@@ -11,9 +15,9 @@ class AmazonSearchProductSpider(scrapy.Spider):
         }
 
     def start_requests(self):
-        keyword_list = ['SSD']
+        keyword_list = asin_list
         for keyword in keyword_list:
-            amazon_search_url = f'https://www.amazon.com/s?k={keyword}&page=1'
+            amazon_search_url = f'https://www.amazon.fr/s?k={keyword}&page=1'
             yield scrapy.Request(url=amazon_search_url, callback=self.discover_product_urls, meta={'keyword': keyword, 'page': 1})
 
     def discover_product_urls(self, response):
@@ -24,7 +28,7 @@ class AmazonSearchProductSpider(scrapy.Spider):
         search_products = response.css("div.s-result-item[data-component-type=s-search-result]")
         for product in search_products:
             relative_url = product.css("h2>a::attr(href)").get()
-            product_url = urljoin('https://www.amazon.com/', relative_url).split("?")[0]
+            product_url = urljoin('https://www.amazon.fr/', relative_url).split("?")[0]
             yield scrapy.Request(url=product_url, callback=self.parse_product_data, meta={'keyword': keyword, 'page': page})
             
         ## Get All Pages
@@ -34,7 +38,7 @@ class AmazonSearchProductSpider(scrapy.Spider):
             ).getall()
 
             for page_num in available_pages:
-                amazon_search_url = f'https://www.amazon.com/s?k={keyword}&page={page_num}'
+                amazon_search_url = f'https://www.amazon.fr/s?k={keyword}&page={page_num}'
                 yield scrapy.Request(url=amazon_search_url, callback=self.discover_product_urls, meta={'keyword': keyword, 'page': page_num})
 
 
