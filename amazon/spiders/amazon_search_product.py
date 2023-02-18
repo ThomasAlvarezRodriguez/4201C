@@ -2,20 +2,16 @@ import json
 import scrapy
 from urllib.parse import urljoin
 import re
-import pandas as pd
-
-df = pd.read_csv('C:/Users/eityg/Git/4201C/ASIN.csv') # Read the data
-asin_list = df['asin'].tolist()
 
 class AmazonSearchProductSpider(scrapy.Spider):
-    name = "amazon_search_product"
+    name = "SSD-HDD"
 
     custom_settings = {
         'FEEDS': { 'data/%(name)s_%(time)s.csv': { 'format': 'csv',}}
         }
 
     def start_requests(self):
-        keyword_list = asin_list
+        keyword_list = ['SSD','HDD']
         for keyword in keyword_list:
             amazon_search_url = f'https://www.amazon.fr/s?k={keyword}&page=1'
             yield scrapy.Request(url=amazon_search_url, callback=self.discover_product_urls, meta={'keyword': keyword, 'page': 1})
@@ -43,18 +39,17 @@ class AmazonSearchProductSpider(scrapy.Spider):
 
 
     def parse_product_data(self, response):
-        image_data = json.loads(re.findall(r"colorImages':.*'initial':\s*(\[.+?\])},\n", response.text)[0])
-        variant_data = re.findall(r'dimensionValuesDisplayData"\s*:\s* ({.+?}),\n', response.text)
-        feature_bullets = [bullet.strip() for bullet in response.css("#feature-bullets li ::text").getall()]
+        keyword = response.meta['keyword']
         price = response.css('.a-price span[aria-hidden="true"] ::text').get("")
         if not price:
             price = response.css('.a-price .a-offscreen ::text').get("")
         yield {
             "name": response.css("#productTitle::text").get("").strip(),
+            "asin": response.css("input#ASIN::attr(value)").get(),
             "price": price,
             "stars": response.css("i[data-hook=average-star-rating] ::text").get("").strip(),
             "rating_count": response.css("div[data-hook=total-review-count] ::text").get("").strip(),
-            "feature_bullets": feature_bullets,
-            "images": image_data,
-            "variant_data": variant_data,
+            "keyword": keyword,
+            "url": response.url,
+            "description": response.css("#productDescription p::text").get("")
         }
