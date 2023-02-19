@@ -27,7 +27,28 @@ df['Capacité'] = nom.apply(extraire_capacite)
 df = df[df['Capacité'].notnull()]
 
 # Afficher le dataframe résultant
+
+Cap = df['Capacité'].astype(str) # Get the capacity of the product
+
+# Maintenant on va harmoniser les capacités de stockage en les mettant en Go
+# Si la capacité est en To ou TB, on la multiplie par 1000 pour l'avoir en Go
+# Si la capacité est en Mo, on la divise par 1000 pour l'avoir en Go
+
+# Fonction pour harmoniser les capacités de stockage
+def harmoniser_capacite(texte):
+    if 'To' in texte or 'TB' in texte or 'to' in texte:
+        capacite = float(texte[:-2]) * 1000
+        return capacite
+    elif 'Mo' in texte:
+        capacite = float(texte[:-2]) / 1000
+        return capacite
+    else:
+        return float(texte[:-2])
+    
+# Appliquer la fonction harmoniser_capacite à la colonne 'Capacité' pour créer une nouvelle colonne 'Capacité harmonisée'
+df['Capacité harmonisée'] = Cap.apply(harmoniser_capacite)
+
+# Afficher le dataframe résultant
 print(df)
 
-#save the data in a csv file
-df.to_csv('Capacité.csv', index=False)
+df.to_csv('Data_traité.csv', index=False) # Save the data
