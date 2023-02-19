@@ -9,7 +9,7 @@ class AmazonSearchSpider(scrapy.Spider):
         }
 
     def start_requests(self):
-        keyword_list = ['SSD']
+        keyword_list = ['SSD','HDD']
         for keyword in keyword_list:
             amazon_search_url = f'https://www.amazon.fr/s?k={keyword}&page=1'
             yield scrapy.Request(url=amazon_search_url, callback=self.parse_search_results, meta={'keyword': keyword, 'page': 1})
@@ -35,6 +35,7 @@ class AmazonSearchSpider(scrapy.Spider):
                     "rating": (product.css("span[aria-label~=stars]::attr(aria-label)").re(r"(\d+\.*\d*) out") or [None])[0],
                     "rating_count": product.css("span[aria-label~=stars] + span::attr(aria-label)").get(),
                     "thumbnail_url": product.xpath("//img[has-class('s-image')]/@src").get(),
+                    
                 }
 
 
