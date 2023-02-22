@@ -48,7 +48,18 @@ def harmoniser_capacite(texte):
 # Appliquer la fonction harmoniser_capacite à la colonne 'Capacité' pour créer une nouvelle colonne 'Capacité harmonisée'
 df['Capacité harmonisée'] = Cap.apply(harmoniser_capacite)
 
+# on transforme les espaces insécables en espaces normaux dans l'ensemble des colonnes contenant des chaînes de caractères
+df['name'] = df['name'].str.replace(u'\xa0', u' ')
+#supprimer les virgules dans le nom
+df['name'] = df['name'].str.replace(u',', u' ')
+df['stars'] = df['stars'].str.replace(u'\xa0', u' ')
+df['rating_count'] = df['rating_count'].str.replace(u'\xa0', u' ')
+
+
 # Afficher le dataframe résultant
 print(df)
 
-df.to_csv('Data_traité.csv', index=False) # Save the data
+
+ # Save the data
+df.to_csv('DataTraité.csv', sep=';', index=False)
+
