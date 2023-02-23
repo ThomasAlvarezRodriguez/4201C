@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import re
 df = pd.read_csv('Data.csv') # Read the data
+dfM = pd.read_csv('traitement.csv', sep=';') # Read the data
 nom = df['name'].astype(str) # Get the name of the product
 #on extrait chaque ligne pour en faire une chaine de caractère  qu'on stocke dans une liste
 
@@ -68,9 +69,15 @@ for i in df['rating_count']:
     if i=="":
         i="Inconnu"
         
+# On combine df et dfPrice pour avoir les prix des produits avec la colonne asin en clé
+df = pd.merge(df, dfM, on='asin', how='left')
+# on supprime les lignes dupliquées
+df = df.drop_duplicates(subset=['asin'])
 
-# Afficher le dataframe résultant
-print(df)
+# On supprime la colonne price_x et on renomme la colonne price_y en price
+df = df.drop(columns=['price_x'])
+df = df.rename(columns={'price_y': 'price'})
+
 
 print(type(df['stars']))
 
