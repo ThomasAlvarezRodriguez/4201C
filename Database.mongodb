@@ -1,0 +1,34 @@
+// Préparation Mongo pour l'utilisation dans l'application Flask
+app.config['MONGO_DBNAME'] = '4201c'
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/4201c'
+
+mongo = PyMongo(app)
+
+# Définition des routes
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/add')
+
+// Import du JSON dans la base de données
+def add():
+    # Ouverture du fichier JSON
+    with open('SSD.json') as f:
+        file_data = json.load(f)
+    # Insertion des données dans la base de données
+    if mongo.db.4201c.insert(file_data):
+        return 'Data imported successfully'
+
+// Affichage des données dans la base de données
+@app.route('/get')
+def get_all():
+    users = mongo.db.4201c.find()
+    output = []
+    for s in users:
+        output.append({'name' : s['name'], 'age' : s['age']})
+    return jsonify({'result' : output})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+

@@ -1,0 +1,35 @@
+# Path: flask.py
+
+from flask import Flask, render_template, jsonify
+from pymongo import MongoClient
+
+app = Flask(__name__)
+
+# Connect to MongoDB database
+client = MongoClient('mongodb://localhost:27017/')
+
+# Connect to SSD-HDD collection
+db = client['4201C']
+collection = db['SSD-HDD']
+
+# Mainteant que la connexion est établie, on peut faire des requêtes à la base de données
+# On peut par exemple afficher les 10 premiers éléments de la collection
+# Il faut également créer un fichier index.html. Ce fichier contient le code HTML qui sera affiché dans le navigateur
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/data')
+
+def data():
+    data = []
+    for item in collection.find().limit(10):
+        data.append(item)
+    return jsonify(data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+# Path: index.html
