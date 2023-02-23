@@ -60,14 +60,12 @@ df['name'] = df['name'].str.replace(u',', u' ')
 df['stars'] = df['stars'].str.replace(u'\xa0', u' ')
 df['rating_count'] = df['rating_count'].str.replace(u'\xa0', u' ')
 
+# on remplace les chaines de caractères 'nan' par des "Inconnu"
+df['name'] = df['name'].replace('nan', 'Inconnu')
+df['stars'] = df['stars'].replace('nan', 'Inconnu')
+df['rating_count'] = df['rating_count'].replace('nan', 'Inconnu')
 
-for i in df['stars']:
-    if i == "":
-        i="Inconnu"
 
-for i in df['rating_count']:
-    if i=="":
-        i="Inconnu"
         
 # On combine df et dfPrice pour avoir les prix des produits avec la colonne asin en clé
 df = pd.merge(df, dfM, on='asin', how='left')
