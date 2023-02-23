@@ -2,7 +2,7 @@ import pandas as pd
 from pymongo import MongoClient
 
 # Load CSV file into pandas dataframe
-df = pd.read_csv('DataTraité.csv', sep=';')
+df = pd.read_csv('DataTraite.csv', sep=';')
 
 # Connect to MongoDB database
 client = MongoClient('mongodb://localhost:27017/')

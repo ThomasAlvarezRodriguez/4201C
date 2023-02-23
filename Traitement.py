@@ -21,14 +21,14 @@ def extraire_capacite(texte):
         return None
 
 # Appliquer la fonction extraire_capacite à la colonne 'Titre' pour créer une nouvelle colonne 'Capacité'
-df['Capacité'] = nom.apply(extraire_capacite)
+df['capacity'] = nom.apply(extraire_capacite)
 
 # Supprimer les lignes qui n'ont pas de capacité de stockage
-df = df[df['Capacité'].notnull()]
+df = df[df['capacity'].notnull()]
 
 # Afficher le dataframe résultant
 
-Cap = df['Capacité'].astype(str) # Get the capacity of the product
+Cap = df['capacity'].astype(str) # Get the capacity of the product
 
 # Maintenant on va harmoniser les capacités de stockage en les mettant en Go
 # Si la capacité est en To ou TB, on la multiplie par 1000 pour l'avoir en Go
@@ -46,7 +46,11 @@ def harmoniser_capacite(texte):
         return float(texte[:-2])
     
 # Appliquer la fonction harmoniser_capacite à la colonne 'Capacité' pour créer une nouvelle colonne 'Capacité harmonisée'
-df['Capacité harmonisée'] = Cap.apply(harmoniser_capacite)
+df['harmonized_capacity'] = Cap.apply(harmoniser_capacite)
+
+#Harmonisation du type de données des colonnes stars et rating_count
+df['stars']=df['stars'].astype(str)
+df['rating_count']=df['rating_count'].astype(str)
 
 # on transforme les espaces insécables en espaces normaux dans l'ensemble des colonnes contenant des chaînes de caractères
 df['name'] = df['name'].str.replace(u'\xa0', u' ')
@@ -56,10 +60,20 @@ df['stars'] = df['stars'].str.replace(u'\xa0', u' ')
 df['rating_count'] = df['rating_count'].str.replace(u'\xa0', u' ')
 
 
+for i in df['stars']:
+    if i == "":
+        i="Inconnu"
+
+for i in df['rating_count']:
+    if i=="":
+        i="Inconnu"
+        
+
 # Afficher le dataframe résultant
 print(df)
 
+print(type(df['stars']))
 
  # Save the data
-df.to_csv('DataTraité.csv', sep=';', index=False)
+df.to_csv('DataTraite.csv', sep=';', index=False)
 
