@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Graph</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+	<div id="plot"></div>
+	<script>
+		var data = [{
+			x: [1, 2, 3, 4, 5],
+			y: [1, 4, 9, 16, 25],
+			type: 'scatter'
+		}];
+		var layout = {
+			title: 'Mon Graphique',
+			xaxis: {
+				title: 'X',
+				showgrid: false,
+				zeroline: false
+			},
+			yaxis: {
+				title: 'Y',
+				showline: false
+			}
+		};
+		Plotly.newPlot('plot', data, layout);
+	</script>
+</body>
+</html>

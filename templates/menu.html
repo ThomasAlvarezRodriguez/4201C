@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Menu</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <form method="GET" action="{{ url_for('index') }}">
+		<select name="page">
+			<option value="table">Table</option>
+			<option value="graph">Graphique</option>
+			<option value="text">Texte</option>
+		</select>
+		<button type="submit">Go</button>
+	</form>
+    {% if page == 'table' %}
+        {% include 'table.html' %}
+    {% elif page == 'graph' %}
+        {% include 'graph.html' %}
+    {% elif page == 'text' %}
+        {% include 'text.html' %}
+    {% endif %}
+</body>
+</html>

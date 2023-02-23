@@ -1,38 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>SSD-HDD Data</title>
+    <title>Menu déroulant Flask</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>ASIN</th>
-          <th>Keyword</th>
-          <th>Stars</th>
-          <th>Rating Count</th>
-          <th>URL</th>
-          <th>Capacity</th>
-          <th>Harmonized Capacity</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in data %}
-        <tr>
-          <td>{{ row['name'] }}</td>
-          <td>{{ row['asin'] }}</td>
-          <td>{{ row['keyword'] }}</td>
-          <td>{{ row['stars'] }}</td>
-          <td>{{ row['rating_count'] }}</td>
-          <td>{{ row['url'] }}</td>
-          <td>{{ row['capacity'] }}</td>
-          <td>{{ row['harmonized_capacity'] }}</td>
-          <td>{{ row['price'] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <form method="get" action="/">
+      <label for="page">Sélectionner une page :</label>
+      <select name="page" id="page">
+        <option value="/">Accueil</option>
+        <option value="/table">Tableau</option>
+        <option value="/graph">Graphique</option>
+        <option value="/text">Texte</option>
+      </select>
+      <button type="submit">Aller à la page</button>
+    </form>
   </body>
 </html>

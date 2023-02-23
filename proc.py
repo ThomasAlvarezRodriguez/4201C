@@ -4,7 +4,7 @@ import re
 
 df = pd.read_csv('DataTraite.csv',sep=";") # Read the data
 
-# on vire les lignes qui on "Inconnu" dans la colonne "stars"
+#Suppression des lignes "Inconnu" dans la colonne "stars"
 df = df[df['stars'] != 'Inconnu']
 
 # on modifie la colonne "stars" pour ne garder que les 3 premiers caractères
