@@ -1,50 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Random SSD App</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <title>SSD-HDD Data</title>
   </head>
-  <section class="hero is-dark is-bold">
-    <div class="hero-body">
-      <div class="container">
-        <h1 class="title">
-          Random SSD App!
-        </h1>
-        <h2 class="subtitle">
-          What will it be today?
-        </h2>
-      </div>
-      <br>
-      <div class="container">
-        <button class="button is-large" onClick="window.location.reload();">Go!</button>
-      </div>
-    </div>
-  </section>
   <body>
-  <section class="section">
-    <div class="container">
-        <div class="content is-medium">
-            <h1>{{ SSD.name }}</h1>
-            <h4>Référence : {{ SSD.asin }}</h4>
-            <p>SSD/HDD : {{ SSD.keywords }}</p>
-            <h5>Prix : {{ SSD.price }} €</h5>
-            <p>Evaluation : {{ SSD.stars }}</p>
-            <h6> Nombre d'évaluations : {{ SSD.rating_counts }}</h6>
-            <p> URL du produit : {{ SSD.url }}</p>
-            <h7> Capacité de stockage : {{ SSD.capacity }}</h7>
-            <p>Capacité de stockage (en Go) : {{ SSD.harmonized_capacity}}</p>
-        </div>
-    </div>
-  </section>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>ASIN</th>
+          <th>Keyword</th>
+          <th>Stars</th>
+          <th>Rating Count</th>
+          <th>URL</th>
+          <th>Capacity</th>
+          <th>Harmonized Capacity</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in data %}
+        <tr>
+          <td>{{ row['name'] }}</td>
+          <td>{{ row['asin'] }}</td>
+          <td>{{ row['keyword'] }}</td>
+          <td>{{ row['stars'] }}</td>
+          <td>{{ row['rating_count'] }}</td>
+          <td>{{ row['url'] }}</td>
+          <td>{{ row['capacity'] }}</td>
+          <td>{{ row['harmonized_capacity'] }}</td>
+          <td>{{ row['price'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </body>
-  <footer class="footer">
-    <div class="content has-text-centered">
-      <p>
-        <strong>Random SSD App</strong>
-      </p>
-    </div>
-  </footer>
 </html>

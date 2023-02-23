@@ -2,7 +2,7 @@ import pandas as pd
 from pymongo import MongoClient
 
 # Load CSV file into pandas dataframe
-df = pd.read_csv('DataTraite.csv', sep=';')
+df = pd.read_csv('DataTraite.csv', sep=';', names=['name', 'asin', 'keyword', 'stars', 'rating_count', 'url', 'capacity', 'harmonized_capacity', 'price'])
 
 # Connect to MongoDB database
 client = MongoClient('mongodb://localhost:27017/')
@@ -16,4 +16,3 @@ db['SSD-HDD'].insert_many(df.to_dict('records'))
 
 # Test if data was inserted correctly
 print(db['SSD-HDD'].find_one())
-

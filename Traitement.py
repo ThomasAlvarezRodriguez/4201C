@@ -61,7 +61,6 @@ df['stars'] = df['stars'].str.replace(u'\xa0', u' ')
 df['rating_count'] = df['rating_count'].str.replace(u'\xa0', u' ')
 
 # on remplace les chaines de caractères 'nan' par des "Inconnu"
-df['name'] = df['name'].replace('nan', 'Inconnu')
 df['stars'] = df['stars'].replace('nan', 'Inconnu')
 df['rating_count'] = df['rating_count'].replace('nan', 'Inconnu')
 
