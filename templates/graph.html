@@ -2,27 +2,36 @@
 <html>
 <head>
 	<title>Graph</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
 	<div id="plot"></div>
 	<script>
-		var data = [{
-			x: [1, 2, 3, 4, 5],
-			y: [1, 4, 9, 16, 25],
-			type: 'scatter'
-		}];
+		var data = [
+			{
+				x: [{{hdd_storage|join(',')}}],
+				y: [{{hdd_price|join(',')}}],
+				type: 'scatter',
+				name: 'HDD'
+			},
+			{
+				x: [{{ssd_storage|join(',')}}],
+				y: [{{ssd_price|join(',')}}],
+				type: 'scatter',
+				name: 'SSD'
+			}
+		];
 		var layout = {
-			title: 'Mon Graphique',
+			title: 'Évolution du prix des disques durs en fonction de leur stockage',
 			xaxis: {
-				title: 'X',
-				showgrid: false,
+				title: 'Stockage (en Go)',
+				showgrid: true,
 				zeroline: false
 			},
 			yaxis: {
-				title: 'Y',
-				showline: false
+				title: 'Prix (en euros)',
+				showline: true
 			}
 		};
 		Plotly.newPlot('plot', data, layout);
