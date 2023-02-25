@@ -31,24 +31,30 @@ def index():
             db = client['4201C']
             collection = db['SSD-HDD']
             data = list(collection.find())
+
             # Extract the storage and price data for SSDs and HDDs
             ssd_storage = [d['harmonized_capacity'] for d in data if d['keyword'] == 'SSD']
             ssd_price = [d['price'] for d in data if d['keyword'] == 'SSD']
             hdd_storage = [d['harmonized_capacity'] for d in data if d['keyword'] == 'HDD']
             hdd_price = [d['price'] for d in data if d['keyword'] == 'HDD']
+            ssd_stars = [d['stars'] for d in data if d['keyword'] == 'SSD']
+            hdd_stars = [d['stars'] for d in data if d['keyword'] == 'HDD']
+            # Calculate the mean price per GB for SSDs and HDDs
             ssd_mean_price_per_gb = sum(ssd_price) / sum(ssd_storage)
             hdd_mean_price_per_gb = sum(hdd_price) / sum(hdd_storage)
-            for doc in collection.find():
-                if doc['keyword'] == 'SSD':
-                    ssd_storage.append(doc['capacity'])
-                    ssd_price.append(doc['price'])
-                elif doc['keyword'] == 'HDD':
-                    hdd_storage.append(doc['capacity'])
-                    hdd_price.append(doc['price'])
-            return render_template('graph.html',data=data, ssd_storage=ssd_storage, ssd_price=ssd_price, hdd_storage=hdd_storage, hdd_price=hdd_price, ssd_mean_price_per_gb=ssd_mean_price_per_gb, hdd_mean_price_per_gb=hdd_mean_price_per_gb)
+            # Calculate the mean stars for SSDs and HDDs
+            ssd_mean_rating = sum(ssd_stars) / len(ssd_stars)
+            hdd_mean_rating = sum(hdd_stars) / len(hdd_stars)
+
+
+            return render_template('graph.html',ssd_mean_price_per_gb=ssd_mean_price_per_gb, hdd_mean_price_per_gb=hdd_mean_price_per_gb, hdd_mean_rating=hdd_mean_rating, ssd_mean_rating=ssd_mean_rating, data=data, ssd_storage=ssd_storage, ssd_price=ssd_price, hdd_storage=hdd_storage, hdd_price=hdd_price, ssd_stars=ssd_stars, hdd_stars=hdd_stars)
+
         elif page == 'text':
-            return render_template('text.html')# If the 'page' parameter is not present or invalid, render the default index page
-    return render_template('index.html')
+            return render_template('text.html')
+        else:
+            return render_template('index.html')
+
+
 
 if __name__ == '__main__':
     app.run()

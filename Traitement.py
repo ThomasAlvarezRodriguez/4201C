@@ -9,8 +9,10 @@ nom = df['name'].astype(str) # Get the name of the product
 #on extrait chaque ligne pour en faire une chaine de caractère  qu'on stocke dans une liste
 
 
-# Définir l'expression régulière pour extraire la capacité de stockage
-regex_capacite = r'(\d+)(\s*Go|\s*To|\s*Mo|\s*TB|\s*to|\s*go|\s*GB)'
+# Définir l'expression régulière pour extraire la capacité de stockage, il faut faire attention car certains capacités sont de
+regex_capacite = r'(\d+)(\s*Go|\s*To|\s*TB|\s*to|\s*go|\s*GB)'
+
+
 
 # Fonction pour extraire la capacité de stockage
 def extraire_capacite(texte):

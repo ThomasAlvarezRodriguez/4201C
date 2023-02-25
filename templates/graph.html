@@ -16,11 +16,12 @@
         </select>
         <button type="submit">Aller à la page</button>
     </form>
-	<p>Moyenne de prix par Go :</p>
-    <ul>
-        <li>SSD : {{ ssd_mean_price_per_gb }}</li>
-        <li>HDD : {{ hdd_mean_price_per_gb }}</li>
-    </ul>
+    <div>
+        <p>Mean price per GB for SSDs: {{ssd_mean_price_per_gb}} €/GB</p>
+        <p>Mean price per GB for HDDs: {{hdd_mean_price_per_gb}} €/GB</p>
+		<p>Mean rating for SSDs: {{ssd_mean_rating}}</p>
+		<p>Mean rating for HDDs: {{hdd_mean_rating}}</p>
+    </div>
 	<div id="plot"></div>
 	<script>
 		var hdd_price_per_gb = [];
@@ -38,14 +39,14 @@
 		{% endfor %}
 		var data = [
 			{
-				x: hdd_storage,
 				y: hdd_price_per_gb,
+				x: hdd_storage,
 				type: 'scatter',
 				name: 'HDD'
 			},
 			{
-				x: ssd_storage,
 				y: ssd_price_per_gb,
+				x: ssd_storage,
 				type: 'scatter',
 				name: 'SSD'
 			}
@@ -63,6 +64,38 @@
 			}
 		};
 		Plotly.newPlot('plot', data, layout);
+	</script>
+	<div id="bar-plot"></div>
+	<script>
+		var hdd_price_per_gb = [];
+		var hdd_mean_rating = [];
+		var ssd_price_per_gb = [];
+		var ssd_mean_rating = [];
+	{% for doc in data %}
+		{% if doc['keyword'] == 'HDD' %}
+			hdd_price_per_gb.push({{ doc['price'] }} / {{ doc['harmonized_capacity'] }});
+			hdd_mean_rating.push({{ doc['stars'] }});
+		{% elif doc['keyword'] == 'SSD' %}
+			ssd_price_per_gb.push({{ doc['price'] }} / {{ doc['harmonized_capacity'] }});
+			ssd_mean_rating.push({{ doc['stars'] }});
+		{% endif %}
+	{% endfor %}
+	var hdd_data = [    		{        			x: hdd_price_per_gb,        			y: hdd_mean_rating,        			type: 'bar',        			name: 'HDD'    		}	];
+	var ssd_data = [    		{        			x: ssd_price_per_gb,        			y: ssd_mean_rating,        			type: 'bar',        			name: 'SSD'    		}	];
+	var layout = {
+		title: 'Moyenne des évaluations en fonction du prix par Go',
+		xaxis: {
+			title: 'Prix par Go (en euros)',
+			showgrid: true,
+			zeroline: false
+		},
+		yaxis: {
+			title: 'Moyenne des évaluations',
+			showline: true
+		},
+		barmode: 'group',
+	};
+	Plotly.newPlot('bar-plot', hdd_data.concat(ssd_data), layout);
 	</script>
 </body>
 </html>
