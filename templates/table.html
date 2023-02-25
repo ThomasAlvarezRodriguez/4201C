@@ -2,67 +2,69 @@
 <html>
   <head>
     <title>SSD-HDD Data</title>
-    <style>
-      /* Style pour la table */
-      table {
-        border-collapse: collapse;
-        width: 100%;
-        margin-bottom: 50px;
-      }
-      
-      th, td {
-        text-align: left;
-        padding: 12px;
-        font-weight: normal;
-        font-size: 14px;
-      }
-
-      th {
-        background-color: #F5F5F5;
-        border-bottom: 1px solid #ddd;
-        font-weight: bold;
-        color: #555;
-      }
-
-      /* Alternance des couleurs de ligne */
-      tbody tr:nth-child(even) {
-        background-color: #F9F9F9;
-      }
-
-      tbody tr:hover {
-        background-color: #EFEFEF;
-      }
-
-      /* Style pour les liens */
-      a {
-        color: #2196F3;
-        text-decoration: none;
-        transition: all 0.2s ease-in-out;
-      }
-
-      a:hover {
-        color: #F44336;
-        text-decoration: underline;
-      }
-
-      /* Style pour les boutons */
-      .button {
-        display: inline-block;
-        padding: 8px 16px;
-        background-color: #2196F3;
-        color: #FFF;
-        font-size: 14px;
-        font-weight: bold;
-        border-radius: 4px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.2s ease-in-out;
-      }
-
-      .button:hover {
-        background-color: #F44336;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css"                   
+              href="{{ url_for('static', filename='style.css') }}">
+        <style>                                                  
+          /* Style pour la table */                               
+          table {                                                
+            border-collapse: collapse;                           
+            width: 100%;                                         
+            margin-bottom: 50px;                                 
+          }                                                      
+                                                                  
+          th, td {                                               
+            text-align: left;                                    
+            padding: 12px;                                       
+            font-weight: normal;                                 
+            font-size: 14px;                                     
+          }                                                      
+                                                                  
+          th {                                                   
+            background-color: #F5F5F5;                           
+            border-bottom: 1px solid #ddd;                        
+            font-weight: bold;                                   
+            color: #555;                                         
+          }                                                      
+                                                                  
+          /* Alternance des couleurs de ligne */                 
+          tbody tr:nth-child(even) {                             
+            background-color: #F9F9F9;                           
+          }                                                      
+                                                                  
+          tbody tr:hover {                                       
+            background-color: #EFEFEF;                           
+          }                                                      
+                                                                  
+          /* Style pour les liens */                             
+          a {                                                    
+            color: #2196F3;                                      
+            text-decoration: none;                               
+            transition: all 0.2s ease-in-out;                     
+          }                                                      
+                                                                  
+          a:hover {                                              
+            color: #F44336;                                      
+            text-decoration: underline;                          
+          }                                                      
+                                                                  
+          /* Style pour les boutons */                           
+          .button {                                              
+            display: inline-block;                               
+            padding: 8px 16px;                                   
+            background-color: #2196F3;                           
+            color: #FFF;                                         
+            font-size: 14px;                                     
+            font-weight: bold;                                   
+            border-radius: 4px;                                  
+            border: none;                                        
+            cursor: pointer;                                     
+            transition: all 0.2s ease-in-out;                     
+          }                                                      
+                                                                  
+          .button:hover {                                        
+            background-color: #F44336;                           
+          }                                                      
+        </style>                                                 
   </head>
   <body>
     <form method="POST" action="/">
@@ -101,8 +103,8 @@
           <td>{{ row['rating_count'] }}</td>
           <td><a href="{{ row['url'] }}">{{ row['url'] }}</a></td>
           <td>{{ row['capacity'] }}</td>
-          <td>{{ row['harmonized_capacity'] }}</td>
-          <td>{{ row['price'] }}</td>
+          <td>{{ row['harmonized_capacity'] }} Go</td>
+          <td>{{ row['price'] }} €</td>
         </tr>
         {% endfor %}
       </body>

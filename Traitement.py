@@ -11,7 +11,7 @@ nom = df['name'].astype(str) # Get the name of the product
 #on extrait chaque ligne pour en faire une chaine de caractère  qu'on stocke dans une liste
 
 
-# Définir l'expression régulière pour extraire la capacité de stockage, il faut faire attention car certains capacités sont de
+# Définir l'expression régulière pour extraire la capacité de stockage
 regex_capacite = r'(?<!Tours|tours)(\d+)(\s*Go|\s*To|\s*TB|\s*go|\s*GB|\s*TO)'
 
 
@@ -111,3 +111,4 @@ db['SSD-HDD'].insert_many(df.to_dict('records'))
 
 # Test if data was inserted correctly
 print(db['SSD-HDD'].find_one())
+print(max(df['harmonized_capacity']))
