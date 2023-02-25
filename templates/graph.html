@@ -6,31 +6,59 @@
 	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
+	<form method="post" action="/">
+        <label for="page">Sélectionner une page :</label>
+        <select name="page" id="page">
+            <option value="/">Accueil</option>
+            <option value="/table">Tableau</option>
+            <option value="/graph">Graphique</option>
+            <option value="/text">Texte</option>
+        </select>
+        <button type="submit">Aller à la page</button>
+    </form>
+	<p>Moyenne de prix par Go :</p>
+    <ul>
+        <li>SSD : {{ ssd_mean_price_per_gb }}</li>
+        <li>HDD : {{ hdd_mean_price_per_gb }}</li>
+    </ul>
 	<div id="plot"></div>
 	<script>
+		var hdd_price_per_gb = [];
+		var hdd_storage = [];
+		var ssd_price_per_gb = [];
+		var ssd_storage = [];
+		{% for doc in data %}
+		    {% if doc['keyword'] == 'HDD' %}
+		        hdd_price_per_gb.push({{ doc['price'] }} / {{ doc['harmonized_capacity'] }});
+		        hdd_storage.push({{ doc['harmonized_capacity'] }});
+		    {% elif doc['keyword'] == 'SSD' %}
+		        ssd_price_per_gb.push({{ doc['price'] }} / {{ doc['harmonized_capacity'] }});
+		        ssd_storage.push({{ doc['harmonized_capacity'] }});
+		    {% endif %}
+		{% endfor %}
 		var data = [
 			{
-				x: [{{hdd_storage|join(',')}}],
-				y: [{{hdd_price|join(',')}}],
+				x: hdd_storage,
+				y: hdd_price_per_gb,
 				type: 'scatter',
 				name: 'HDD'
 			},
 			{
-				x: [{{ssd_storage|join(',')}}],
-				y: [{{ssd_price|join(',')}}],
+				x: ssd_storage,
+				y: ssd_price_per_gb,
 				type: 'scatter',
 				name: 'SSD'
 			}
 		];
 		var layout = {
-			title: 'Évolution du prix des disques durs en fonction de leur stockage',
+			title: 'Comparaison du prix par Go entre les disques durs et les SSD',
 			xaxis: {
 				title: 'Stockage (en Go)',
 				showgrid: true,
 				zeroline: false
 			},
 			yaxis: {
-				title: 'Prix (en euros)',
+				title: 'Prix par Go (en euros)',
 				showline: true
 			}
 		};

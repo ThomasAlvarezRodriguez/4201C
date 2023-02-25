@@ -65,6 +65,17 @@
     </style>
   </head>
   <body>
+    <form method="POST" action="/">
+      <label for="page">Sélectionner une page :</label>
+      <select name="page" id="page">
+        <option value="home">Accueil</option>
+        <option value="table" selected>Tableau</option>
+        <option value="graph">Graphique</option>
+        <option value="text">Texte</option>
+      </select>
+      <button type="submit">Aller à la page</button>
+    </form>
+
     <table>
       <thead>
         <tr>
@@ -93,8 +104,8 @@
           <td>{{ row['price'] }}</td>
         </tr>
         {% endfor %}
-      </tbody>
-    </table>    
+      </body>
+    </html> 
   </body>
 </html>
 

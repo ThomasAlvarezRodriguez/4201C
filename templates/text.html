@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Texte</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <title>Texte</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-	<h1>Mon Titre</h1>
-	<p>Mon texte</p>
+  <form method="POST" action="/">
+    <label for="page">Sélectionner une page :</label>
+    <select name="page" id="page">
+      <option value="home">Accueil</option>
+      <option value="table">Tableau</option>
+      <option value="graph">Graphique</option>
+      <option value="text" selected>Texte</option>
+    </select>
+    <button type="submit">Aller à la page</button>
+  </form>
+
+  <h1>Mon Titre</h1>
+  <p>Mon texte</p>
 </body>
 </html>
