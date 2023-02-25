@@ -1,43 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Texte</title>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-  <form method="POST" action="/">
-    <label for="page">Sélectionner une page :</label>
-    <select name="page" id="page">
-      <option value="home">Accueil</option>
-      <option value="table">Tableau</option>
-      <option value="graph">Graphique</option>
-      <option value="text" selected>Texte</option>
-      <option value="top_10">Top 10</option>
-    </select>
-    <button type="submit">Aller à la page</button>
-  </form>
-  <h1>Chiffres intéressants</h1>
-  <div>
-    <p>Prix moyen par Go pour les SSDs : {{ssd_mean_price_per_gb}} €/Go</p>
-    <p>Prix moyen par Go pour les HDDs : {{hdd_mean_price_per_gb}} €/Go</p>
-    <p>Note moyenne pour les SSDs : {{ssd_mean_rating}} étoiles sur 5 </p>
-    <p>Note moyenne pour les HDDs : {{hdd_mean_rating}} étoiles sur 5</p>
-    <p>Capacité moyenne pour les SSDs : {{ssd_mean_storage}} Go</p>
-    <p>Capacité moyenne pour les HDDs : {{hdd_mean_storage}} Go</p>
-    <br>
-    <p>Top 3 des SSDs rapport stockage / prix:</p>
-    <ol>
-      {% for product in top3_ssd %}
-        <li>{{ product.name }} - {{ product.harmonized_capacity }} Go - {{ product.price_per_gb }} €/Go</li>
-      {% endfor %}
-    </ol>
-    <br>
-    <p>Top 3 des HDDs rapport stockage / prix:</p>
-    <ol>
-      {% for product in top3_hdd %}
-        <li>{{ product.name }} - {{ product.harmonized_capacity }} Go - {{ product.price_per_gb }} €/Go</li>
-      {% endfor %}
-    </ol>
-  </div>
-</body>
+  <head>
+    <title>Texte</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <form method="POST" action="/">
+      <label for="page">Sélectionner une page :</label>
+      <select name="page" id="page">
+        <option value="home">Accueil</option>
+        <option value="table">Tableau</option>
+        <option value="graph">Graphiques</option>
+        <option value="text" selected>Points clés</option>
+        <option value="top_10">Top 10</option>
+      </select>
+      <button type="submit">Aller à la page</button>
+    </form>
+    <h1>L'essentiel</h1>
+    <h2>Quelques chiffres intéressants</h2>
+    <div>
+      <p>Prix moyen par Go pour les SSDs : {{ssd_mean_price_per_gb}} €/Go</p>
+      <p>Prix moyen par Go pour les HDDs : {{hdd_mean_price_per_gb}} €/Go</p>
+      <p>Note moyenne pour les SSDs : {{ssd_mean_rating}} étoiles sur 5 </p>
+      <p>Note moyenne pour les HDDs : {{hdd_mean_rating}} étoiles sur 5</p>
+      <p>Capacité moyenne pour les SSDs : {{ssd_mean_storage}} Go</p>
+      <p>Capacité moyenne pour les HDDs : {{hdd_mean_storage}} Go</p>
+      <br>
+      <h3>Top 3 des SSDs rapport stockage / prix:</h3>
+      <ol>
+        {% for product in top3_ssd %}
+          <li>{{ product.name }} - {{ product.harmonized_capacity }} Go - {{ product.price_per_gb }} €/Go</li>
+        {% endfor %}
+      </ol>
+      <br>
+      <h3>Top 3 des HDDs rapport stockage / prix:</h3>
+      <ol>
+        {% for product in top3_hdd %}
+          <li>{{ product.name }} - {{ product.harmonized_capacity }} Go - {{ product.price_per_gb }} €/Go</li>
+        {% endfor %}
+      </ol>
+    </div>
+  </body>
 </html>
