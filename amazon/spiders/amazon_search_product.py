@@ -1,7 +1,6 @@
 import json
 import scrapy
 from urllib.parse import urljoin
-import re
 
 class AmazonSearchProductSpider(scrapy.Spider): 
     name = "SSD-HDD" # Nom du spider, il est utilisé pour lancer le spider avec la commande: scrapy crawl SSD-HDD

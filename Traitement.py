@@ -111,4 +111,3 @@ db['SSD-HDD'].insert_many(df.to_dict('records'))
 
 # Test if data was inserted correctly
 print(db['SSD-HDD'].find_one())
-print(max(df['harmonized_capacity']))
