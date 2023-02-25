@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Les 10 SSDs et HDDs les mieux notés </title>
+	<style>
+	    table {
+	        border-collapse: collapse;
+	        width: 100%;
+	        font-family: Arial, sans-serif;
+	        font-size: 14px;
+	    }
+	      
+	    table th, table td {
+	        text-align: left;
+	        padding: 8px;
+	        border-bottom: 1px solid #ddd;
+	    }
+	      
+	    table th {
+	        background-color: #f2f2f2;
+	    }
+	      
+	    table tr:hover {
+	        background-color: #f5f5f5;
+	    }
+	      
+	    table td:last-child {
+	        font-weight: bold;
+	    }
+	      
+	    table td:nth-child(3), table td:nth-child(5) {
+	        text-align: right;
+	    }
+	</style>     
+</head>
+<form method="POST" action="/">
+    <label for="page">Sélectionner une page :</label>
+    <select name="page" id="page">
+      <option value="home">Accueil</option>
+      <option value="table" >Tableau</option>
+      <option value="graph">Graphique</option>
+      <option value="text">Texte</option>
+      <option value="top_10"selected>Top 10</option>
+    </select>
+    <button type="submit">Aller à la page</button>
+  </form>
+<body>
+	<h1>Les 10 SSDs et HDDs les mieux notés </h1>
+	<table>
+		<tr>
+			<th>Rang</th>
+			<th>Nom</th>
+			<th>Capacité de stockage</th>
+			<th>Type de disque</th>
+			<th>Note sur 5</th>
+			<th>Prix</th>
+		</tr>
+		{% for product in top_10 %}
+			<tr>
+				<td>{{ loop.index }}</td>
+				<td>{{ product.name }}</td>
+				<td>{{ product.harmonized_capacity }} Go</td>
+				<td>{{ product.keyword }}</td>
+				<td>{{ product.stars }}</td>
+				<td>{{ product.price }} €</td>
+			</tr>
+		{% endfor %}
+	</table>
+</body>
+</html>

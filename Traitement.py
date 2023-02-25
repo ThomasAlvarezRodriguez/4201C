@@ -12,7 +12,7 @@ nom = df['name'].astype(str) # Get the name of the product
 
 
 # Définir l'expression régulière pour extraire la capacité de stockage, il faut faire attention car certains capacités sont de
-regex_capacite = r'(\d+)(\s*Go|\s*To|\s*TB|\s*to|\s*go|\s*GB)'
+regex_capacite = r'(?<!Tours|tours)(\d+)(\s*Go|\s*To|\s*TB|\s*go|\s*GB|\s*TO)'
 
 
 
@@ -41,15 +41,18 @@ Cap = df['capacity'].astype(str) # Get the capacity of the product
 
 # Fonction pour harmoniser les capacités de stockage
 def harmoniser_capacite(texte):
-    if 'To' in texte or 'TB' in texte or 'to' in texte:
-        capacite = float(texte[:-2]) * 1000
+    if 'To' in texte or 'TB' in texte or 'to' in texte or 'TO' in texte:
+        capacite = float(texte[:-2].replace(',', '.')) * 1000
         return capacite
-    elif 'Mo' in texte:
-        capacite = float(texte[:-2]) / 1000
+    elif 'Go' in texte or 'GB' in texte or 'go' in texte or 'Gb' in texte:
+        capacite = float(texte[:-2].replace(',', '.'))
+        return capacite
+    elif 'Mo' in texte or 'MB' in texte or 'mo' in texte or 'Mb' in texte:
+        capacite = float(texte[:-2].replace(',', '.')) / 1000
         return capacite
     else:
-        return float(texte[:-2])
-    
+        raise ValueError('Unité de mesure non reconnue')
+
 # Appliquer la fonction harmoniser_capacite à la colonne 'Capacité' pour créer une nouvelle colonne 'Capacité harmonisée'
 df['harmonized_capacity'] = Cap.apply(harmoniser_capacite)
 
@@ -108,4 +111,3 @@ db['SSD-HDD'].insert_many(df.to_dict('records'))
 
 # Test if data was inserted correctly
 print(db['SSD-HDD'].find_one())
-print(max(df['harmonized_capacity']))
