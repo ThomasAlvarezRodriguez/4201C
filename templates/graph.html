@@ -16,12 +16,6 @@
         </select>
         <button type="submit">Aller à la page</button>
     </form>
-    <div>
-        <p>Mean price per GB for SSDs: {{ssd_mean_price_per_gb}} €/GB</p>
-        <p>Mean price per GB for HDDs: {{hdd_mean_price_per_gb}} €/GB</p>
-		<p>Mean rating for SSDs: {{ssd_mean_rating}}</p>
-		<p>Mean rating for HDDs: {{hdd_mean_rating}}</p>
-    </div>
 	<div id="plot"></div>
 	<script>
 		var hdd_price_per_gb = [];
@@ -38,25 +32,16 @@
 		    {% endif %}
 		{% endfor %}
 		var data = [
-			{
-				y: hdd_price_per_gb,
-				x: hdd_storage,
-				type: 'scatter',
-				name: 'HDD'
-			},
-			{
-				y: ssd_price_per_gb,
-				x: ssd_storage,
-				type: 'scatter',
-				name: 'SSD'
-			}
+			{y: hdd_price_per_gb, x: hdd_storage, type: 'bar', name: 'HDD', width : 100},
+			{y: ssd_price_per_gb, x: ssd_storage, type: 'bar', name: 'SSD', width : 100}
 		];
 		var layout = {
-			title: 'Comparaison du prix par Go entre les disques durs et les SSD',
+			title: 'Comparaison du prix par Go en fonction de la capacité entre les disques durs et les SSD',
 			xaxis: {
 				title: 'Stockage (en Go)',
 				showgrid: true,
-				zeroline: false
+				zeroline: false,
+				range : [0,28000]
 			},
 			yaxis: {
 				title: 'Prix par Go (en euros)',
@@ -71,31 +56,46 @@
 		var hdd_mean_rating = [];
 		var ssd_price_per_gb = [];
 		var ssd_mean_rating = [];
-	{% for doc in data %}
-		{% if doc['keyword'] == 'HDD' %}
-			hdd_price_per_gb.push({{ doc['price'] }} / {{ doc['harmonized_capacity'] }});
-			hdd_mean_rating.push({{ doc['stars'] }});
-		{% elif doc['keyword'] == 'SSD' %}
-			ssd_price_per_gb.push({{ doc['price'] }} / {{ doc['harmonized_capacity'] }});
-			ssd_mean_rating.push({{ doc['stars'] }});
-		{% endif %}
-	{% endfor %}
-	var hdd_data = [    		{        			x: hdd_price_per_gb,        			y: hdd_mean_rating,        			type: 'bar',        			name: 'HDD'    		}	];
-	var ssd_data = [    		{        			x: ssd_price_per_gb,        			y: ssd_mean_rating,        			type: 'bar',        			name: 'SSD'    		}	];
-	var layout = {
-		title: 'Moyenne des évaluations en fonction du prix par Go',
-		xaxis: {
-			title: 'Prix par Go (en euros)',
-			showgrid: true,
-			zeroline: false
-		},
-		yaxis: {
-			title: 'Moyenne des évaluations',
-			showline: true
-		},
-		barmode: 'group',
-	};
-	Plotly.newPlot('bar-plot', hdd_data.concat(ssd_data), layout);
+
+		{% for doc in data %}
+			{% if doc['keyword'] == 'HDD' %}
+				var price_per_gb = {{ doc['price'] }} / {{ doc['harmonized_capacity'] }};
+				var index = hdd_price_per_gb.indexOf(price_per_gb);
+				if (index >= 0) {
+					hdd_mean_rating[index] = (hdd_mean_rating[index] + {{ doc['stars'] }}) / 2.0;
+				} else {
+					hdd_price_per_gb.push(price_per_gb);
+					hdd_mean_rating.push({{ doc['stars'] }});
+				}
+			{% elif doc['keyword'] == 'SSD' %}
+				var price_per_gb = {{ doc['price'] }} / {{ doc['harmonized_capacity'] }};
+				var index = ssd_price_per_gb.indexOf(price_per_gb);
+				if (index >= 0) {
+					ssd_mean_rating[index] = (ssd_mean_rating[index] + {{ doc['stars'] }}) / 2.0;
+				} else {
+					ssd_price_per_gb.push(price_per_gb);
+					ssd_mean_rating.push({{ doc['stars'] }});
+				}
+			{% endif %}
+		{% endfor %}
+
+		var hdd_data = [{x: hdd_price_per_gb, y: hdd_mean_rating, type: 'bar', name: 'HDD', width : 0.0025}];
+		var ssd_data = [{x: ssd_price_per_gb, y: ssd_mean_rating, type: 'bar', name: 'SSD', width : 0.0025}];
+		var layout = {
+			title: 'Note en fonction du prix par Go',
+			xaxis: {
+				title: 'Prix par Go (en euros)',
+				showgrid: true,
+				zeroline: false
+			},
+			yaxis: {
+				title: 'Note (sur 5)',
+				showline: true,
+			},
+			barmode: 'group',
+			height: 600
+		};
+		Plotly.newPlot('bar-plot', hdd_data.concat(ssd_data), layout);
 	</script>
 </body>
 </html>

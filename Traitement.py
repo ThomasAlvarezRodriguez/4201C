@@ -3,6 +3,8 @@
 import pandas as pd
 import numpy as np
 import re
+from pymongo import MongoClient
+
 df = pd.read_csv('Data.csv') # Read the data
 dfM = pd.read_csv('traitement.csv', sep=';') # Read the data
 nom = df['name'].astype(str) # Get the name of the product
@@ -65,8 +67,6 @@ df['rating_count'] = df['rating_count'].str.replace(u'\xa0', u' ')
 # on remplace les chaines de caractères 'nan' par des "Inconnu"
 df['stars'] = df['stars'].replace('nan', 'Inconnu')
 df['rating_count'] = df['rating_count'].replace('nan', 'Inconnu')
-
-
         
 # On combine df et dfPrice pour avoir les prix des produits avec la colonne asin en clé
 df = pd.merge(df, dfM, on='asin', how='left')
@@ -77,9 +77,35 @@ df = df.drop_duplicates(subset=['asin'])
 df = df.drop(columns=['price_x'])
 df = df.rename(columns={'price_y': 'price'})
 
+#Suppression des lignes "Inconnu" dans la colonne "stars"
+df = df[df['stars'] != 'Inconnu']
 
-print(type(df['stars']))
+# on modifie la colonne "stars" pour ne garder que les 3 premiers caractères
+df['stars'] = df['stars'].str[:3]
+# on modifie la colonne "rating_count" pour ne garder que les chiffres
+df['rating_count'] = df['rating_count'].str.extract('(\d+)', expand=False)
+#On modifie la colonne "stars" pour transformer les valeurs "4,5" en "4.5"
+df['stars'] = df['stars'].str.replace(',','.')
+# On transforme les colonnes "stars" et "rating_count" en float
+df['stars'] = df['stars'].astype(float)
+df['rating_count'] = df['rating_count'].astype(float)
 
- # Save the data
-df.to_csv('DataTraite.csv', sep=';', index=False)
+# on sauvegarde le fichier
+df.to_csv('DataTraite.csv',sep=";",index=False)
 
+# Load CSV file into pandas dataframe
+df = pd.read_csv('DataTraite.csv', sep=';')
+
+# Connect to MongoDB database
+client = MongoClient('mongodb://localhost:27017/')
+db = client['4201C']
+
+# Drop collection if it already exists
+db['SSD-HDD'].drop()
+
+# Insert data into MongoDB collection
+db['SSD-HDD'].insert_many(df.to_dict('records'))
+
+# Test if data was inserted correctly
+print(db['SSD-HDD'].find_one())
+print(max(df['harmonized_capacity']))

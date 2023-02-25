@@ -26,6 +26,7 @@ def index():
             data = list(collection.find())
             return render_template('table.html', data=data)
         elif page == 'graph':
+
             # Connect to MongoDB database
             client = MongoClient('mongodb://localhost:27017/')
             db = client['4201C']
@@ -39,18 +40,32 @@ def index():
             hdd_price = [d['price'] for d in data if d['keyword'] == 'HDD']
             ssd_stars = [d['stars'] for d in data if d['keyword'] == 'SSD']
             hdd_stars = [d['stars'] for d in data if d['keyword'] == 'HDD']
-            # Calculate the mean price per GB for SSDs and HDDs
-            ssd_mean_price_per_gb = sum(ssd_price) / sum(ssd_storage)
-            hdd_mean_price_per_gb = sum(hdd_price) / sum(hdd_storage)
-            # Calculate the mean stars for SSDs and HDDs
-            ssd_mean_rating = sum(ssd_stars) / len(ssd_stars)
-            hdd_mean_rating = sum(hdd_stars) / len(hdd_stars)
+        
+            return render_template('graph.html', data=data, ssd_storage=ssd_storage, ssd_price=ssd_price, hdd_storage=hdd_storage, hdd_price=hdd_price, ssd_stars=ssd_stars, hdd_stars=hdd_stars)
 
-
-            return render_template('graph.html',ssd_mean_price_per_gb=ssd_mean_price_per_gb, hdd_mean_price_per_gb=hdd_mean_price_per_gb, hdd_mean_rating=hdd_mean_rating, ssd_mean_rating=ssd_mean_rating, data=data, ssd_storage=ssd_storage, ssd_price=ssd_price, hdd_storage=hdd_storage, hdd_price=hdd_price, ssd_stars=ssd_stars, hdd_stars=hdd_stars)
 
         elif page == 'text':
-            return render_template('text.html')
+
+            client = MongoClient('mongodb://localhost:27017/')
+            db = client['4201C']
+            collection = db['SSD-HDD']
+            data = list(collection.find())
+
+            ssd_storage = [d['harmonized_capacity'] for d in data if d['keyword'] == 'SSD']
+            ssd_mean_storage = round (sum(ssd_storage)/len(ssd_storage))
+            ssd_price = [d['price'] for d in data if d['keyword'] == 'SSD']
+            hdd_storage = [d['harmonized_capacity'] for d in data if d['keyword'] == 'HDD']
+            hdd_mean_storage = round (sum(hdd_storage)/len(hdd_storage))
+            hdd_price = [d['price'] for d in data if d['keyword'] == 'HDD']
+            ssd_stars = [d['stars'] for d in data if d['keyword'] == 'SSD']
+            hdd_stars = [d['stars'] for d in data if d['keyword'] == 'HDD']
+            # Calculate the mean price per GB for SSDs and HDDs
+            ssd_mean_price_per_gb = round(sum(ssd_price) / sum(ssd_storage),4)
+            hdd_mean_price_per_gb = round(sum(hdd_price) / sum(hdd_storage),4)
+            # Calculate the mean stars for SSDs and HDDs
+            ssd_mean_rating = round(sum(ssd_stars) / len(ssd_stars),2)
+            hdd_mean_rating = round(sum(hdd_stars) / len(hdd_stars),2)
+            return render_template('text.html', data=data, ssd_mean_storage=ssd_mean_storage,hdd_mean_storage=hdd_mean_storage,ssd_mean_price_per_gb=ssd_mean_price_per_gb, hdd_mean_price_per_gb=hdd_mean_price_per_gb, hdd_mean_rating=hdd_mean_rating, ssd_mean_rating=ssd_mean_rating)
         else:
             return render_template('index.html')
 
