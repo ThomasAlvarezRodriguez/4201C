@@ -61,7 +61,7 @@ df['stars']=df['stars'].astype(str)
 df['rating_count']=df['rating_count'].astype(str)
 
 # on transforme les espaces insécables en espaces normaux dans l'ensemble des colonnes contenant des chaînes de caractères
-df['name'] = df['name'].str.replace(u'\xa0', u' ')
+df['name'] = df['name'].str.replace(u'\xa0', u' ') 
 #supprimer les virgules dans le nom
 df['name'] = df['name'].str.replace(u',', u' ')
 df['stars'] = df['stars'].str.replace(u'\xa0', u' ')
@@ -85,8 +85,14 @@ df = df[df['stars'] != 'Inconnu']
 
 # on modifie la colonne "stars" pour ne garder que les 3 premiers caractères
 df['stars'] = df['stars'].str[:3]
+# on modifie la colonne "rating_count" pour supprimer les espaces
+df['rating_count'] = df['rating_count'].str.replace(' ','')
+# on modifie la colonne "rating_count" pour ajouter un espace avant "é"
+df['rating_count'] = df['rating_count'].str.replace('é',' é')
 # on modifie la colonne "rating_count" pour ne garder que les chiffres
-df['rating_count'] = df['rating_count'].str.extract('(\d+)', expand=False)
+df['rating_count'] = df['rating_count'].str.replace(r'\D','')
+
+
 #On modifie la colonne "stars" pour transformer les valeurs "4,5" en "4.5"
 df['stars'] = df['stars'].str.replace(',','.')
 # On transforme les colonnes "stars" et "rating_count" en float
@@ -96,18 +102,18 @@ df['rating_count'] = df['rating_count'].astype(float)
 # on sauvegarde le fichier
 df.to_csv('DataTraite.csv',sep=";",index=False)
 
-# Load CSV file into pandas dataframe
+# Lecture du fichier csv
 df = pd.read_csv('DataTraite.csv', sep=';')
 
-# Connect to MongoDB database
+# Connection à MongoDB
 client = MongoClient('mongodb://localhost:27017/')
 db = client['4201C']
 
-# Drop collection if it already exists
+# Drop de la collection si elle existe déjà
 db['SSD-HDD'].drop()
 
-# Insert data into MongoDB collection
+# Insert des données dans la collection
 db['SSD-HDD'].insert_many(df.to_dict('records'))
 
-# Test if data was inserted correctly
+# Test
 print(db['SSD-HDD'].find_one())
