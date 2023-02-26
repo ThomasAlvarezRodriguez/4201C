@@ -1,8 +1,15 @@
-Ce projet nécessite l'installation de Python et de certaines librairies. 
+Ce projet nécessite l'installation correcte de Python -et son ajout au PATH (afin que pip fonctionne). N.B. Python 3.11.2 pose problème sur une installation, Python 3.10.10 fonctionne correctement. https://www.python.org/downloads/release/python-31010/
 La commande:  pip install -r requirements.txt permet d'installer les librairies nécessaires au bon fonctionnement du projet.
 
 Il faut également installer MongoDB pour pouvoir stocker les données sur le port par défaut (27017).
-Vous pouvez télécharger MongoDB ici : https://www.mongodb.com/try/download/community
+Vous pouvez télécharger MongoDB ici : https://www.mongodb.com/try/download/community (installer community servers)
+
+Ensuite, depuis le cmd, vous pouvez entrer les commandes suivantes : 
+
+python Traitement.py
+python app.py
+
+Il faudra ensuite aller à la page http://127.0.0.1:5000.
 
 Description technique de chaque fichier du projet ainsi que leur utilisation :
 

@@ -3,7 +3,5 @@ numpy
 plotly
 Flask
 pymongo
-re
-json
+regex
 scrapy
-urllib.parse
